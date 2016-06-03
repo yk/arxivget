@@ -16,6 +16,8 @@ def main():
                 lists = line.strip().split('=')[1].strip().split(',')
             if line.startswith('directory'):
                 directory = os.path.expanduser(line.strip().split('=')[1].strip())
+            if line.startswith('numpapers'):
+                numpapers = int(line.strip().split('=')[1].strip())
     if not os.path.exists(directory):
         os.makedirs(directory)
     db = []
@@ -25,7 +27,7 @@ def main():
             db = set(l.strip() for l in f.readlines() if len(l.strip()) > 0)
     for l in lists:
         print("checking", l)
-        page = requests.get('http://export.arxiv.org/api/query?search_query=cat:{}&start=0&max_results=50&sortBy=lastUpdatedDate&sortOrder=descending'.format(l))
+        page = requests.get('http://export.arxiv.org/api/query?search_query=cat:{}&start=0&max_results={}&sortBy=lastUpdatedDate&sortOrder=descending'.format(l, numpapers))
         feedparser._FeedParserMixin.namespaces['http://a9.com/-/spec/opensearch/1.1/'] = 'opensearch'
         feedparser._FeedParserMixin.namespaces['http://arxiv.org/schemas/atom'] = 'arxiv'
         feed = feedparser.parse(page.content)
