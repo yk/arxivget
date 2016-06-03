@@ -54,7 +54,7 @@ def main():
                     db.add(aid)
 
     with open(db_fn, 'w') as f:
-        f.writelines(db)
+        f.writelines(['{}\n'.format(l) for l in db])
 
 
 if __name__ == '__main__':
