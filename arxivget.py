@@ -10,10 +10,11 @@ VALID_CHARS = "-_().: %s%s" % (string.ascii_letters, string.digits)
 
 
 def main():
-    time.sleep(10)
+    # time.sleep(10)
     try:
         requests.get("http://www.google.com")
     except:
+        print("no internet connection")
         exit(0)
     config_fn = os.path.expanduser('~/.arxivgetrc')
     with open(config_fn) as f:
@@ -32,7 +33,7 @@ def main():
         with open(db_fn) as f:
             db = set(l.strip() for l in f.readlines() if len(l.strip()) > 0)
     for l in lists:
-        # print("checking", l)
+        print("checking", l)
         page = requests.get('http://export.arxiv.org/api/query?search_query=cat:{}&start=0&max_results={}&sortBy=lastUpdatedDate&sortOrder=descending'.format(l, numpapers))
         feedparser._FeedParserMixin.namespaces['http://a9.com/-/spec/opensearch/1.1/'] = 'opensearch'
         feedparser._FeedParserMixin.namespaces['http://arxiv.org/schemas/atom'] = 'arxiv'
@@ -47,7 +48,7 @@ def main():
                 if not os.path.exists(pdf_dir):
                     os.makedirs(pdf_dir)
                 pdf_fn = os.path.join(pdf_dir, efn)
-                # print('downloading', pdf_url)
+                print('downloading', pdf_url)
                 pdf = requests.get(pdf_url).content
                 with open(pdf_fn, 'wb') as f:
                     f.write(pdf)
